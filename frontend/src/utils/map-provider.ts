@@ -23,6 +23,7 @@ export const MAP_PROVIDER = {
   replicate: "Replicate",
   voyage: "Voyage AI",
   openrouter: "OpenRouter",
+  telkom: "Telkom AI",
 };
 
 export const mapProvider = (provider: string) =>
