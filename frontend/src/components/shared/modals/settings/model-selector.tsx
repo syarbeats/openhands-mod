@@ -37,6 +37,16 @@ export function ModelSelector({
       setLitellmId(currentModel);
       setSelectedProvider(provider);
       setSelectedModel(model);
+
+      console.log(
+        "[ModelSelector] Current model set to:",
+        currentModel,
+        "Provider:",
+        provider,
+        "Model:",
+        model,
+      );
+
     }
   }, [currentModel]);
 
@@ -46,6 +56,13 @@ export function ModelSelector({
 
     const separator = models[provider]?.separator || "";
     setLitellmId(provider + separator);
+
+    console.log(
+      "[ModelSelector] Provider changed to:",
+      provider,
+      "with separator:",
+      separator,
+    );
   };
 
   const handleChangeModel = (model: string) => {
@@ -55,9 +72,22 @@ export function ModelSelector({
       // LiteLLM lists OpenAI models without the openai/ prefix
       fullModel = model;
     }
+    if (selectedProvider === "telkom") {
+      // LiteLLM lists Anthropic models without the anthropic/ prefix
+      fullModel = model;
+    }
+    
     setLitellmId(fullModel);
     setSelectedModel(model);
     onChange?.(fullModel);
+
+    console.log(
+      "[ModelSelector] Model changed to:",
+      model,
+      "Full model string:",
+      fullModel, "With provider:",
+      selectedProvider
+    );
   };
 
   const clear = () => {

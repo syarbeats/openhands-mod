@@ -78,6 +78,7 @@ FUNCTION_CALLING_SUPPORTED_MODELS = [
     'o4-mini-2025-04-16',
     'gemini-2.5-pro',
     'gpt-4.1',
+    'gpt-3.5-turbo'
 ]
 
 REASONING_EFFORT_SUPPORTED_MODELS = [
@@ -754,9 +755,17 @@ class LLM(RetryMixin, DebugMixin):
 
     def __str__(self) -> str:
         if self.config.api_version:
+            logger.debug(
+                f'[SYARIF-DEBUG] LLM: model={self.config.model}, api_version={self.config.api_version}, base_url={self.config.base_url}'
+            )
             return f'LLM(model={self.config.model}, api_version={self.config.api_version}, base_url={self.config.base_url})'
         elif self.config.base_url:
+            logger.debug(
+                f'[SYARIF-DEBUG] LLM: model={self.config.model}, base_url={self.config.base_url}'
+            )
             return f'LLM(model={self.config.model}, base_url={self.config.base_url})'
+        
+        logger.debug(f'[SYARIF-DEBUG] LLM: model={self.config.model}')
         return f'LLM(model={self.config.model})'
 
     def __repr__(self) -> str:

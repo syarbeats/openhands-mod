@@ -89,6 +89,8 @@ def extract_model_and_provider(model: str) -> ModelInfo:
     separator = '/'
     split = model.split(separator)
 
+    logger.debug = f"[SYARIF-DEBUG-EXTRACT-MODEL-IN-BACKEND] Extracting model and provider from: {model}"
+
     if len(split) == 1:
         # no "/" separator found, try with "."
         separator = '.'
