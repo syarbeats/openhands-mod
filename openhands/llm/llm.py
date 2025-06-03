@@ -121,12 +121,35 @@ class LLM(RetryMixin, DebugMixin):
             config: The LLM configuration.
             metrics: The metrics to use.
         """
+        
+        
         self._tried_model_info = False
         self.metrics: Metrics = (
             metrics if metrics is not None else Metrics(model_name=config.model)
         )
         self.cost_metric_supported: bool = True
         self.config: LLMConfig = copy.deepcopy(config)
+
+        headers = {}
+        # Check if base_url indicates this is Telkom AI
+        #if self.config.base_url and self.config.base_url == 'http://llmdev.telkom.design:8000/v1/chat/completions':
+            #logger.debug(f"Detected Telkom AI provider: {self.config.base_url}")
+        if self.config.base_url and 'llmdev.telkom.design' in self.config.base_url:
+            logger.debug(f"Detected Telkom AI provider: {self.config.base_url}")
+    
+            # Base URL should be just the host part
+            if '/v1/chat/completions' in self.config.base_url:
+                self.config.base_url = self.config.base_url.replace('/v1/chat/completions', '')
+                self.config.api_version = "v1"  # Ensure this matches Telkom AI's expectation
+        
+            # Add Telkom AI specific authorization header
+            if self.config.api_key:
+                #headers["Authorization"] = f"Bearer {self.config.api_key.get_secret_value()}"
+                headers["Authorization"] = f"{self.config.api_key.get_secret_value()}"
+                logger.debug(f"Using Telkom AI API key for authorization with Authorization header: {self.config.api_key.get_secret_value()}")
+                # Add any other Telkom AI specific headers if needed
+                # headers["X-Telkom-AI-Option"] = "value"
+
 
         self.model_info: ModelInfo | None = None
         self.retry_listener = retry_listener
@@ -191,6 +214,7 @@ class LLM(RetryMixin, DebugMixin):
             top_p=self.config.top_p,
             drop_params=self.config.drop_params,
             seed=self.config.seed,
+            headers=headers,
             **kwargs,
         )
 
