@@ -50,7 +50,7 @@ export const extractModelAndProvider = (model: string) => {
     }
     if (VERIFIED_TELKOM_MODELS.includes(split[0])) {
       console.log("[TELKOM-AI] Provider is Telkom AI with model:", split[0]);
-      return { provider: "telkom", model: split[0], separator: "/" };
+      return { provider: "telkom ai", model: split[0], separator: "/" };
     }
     // return as model only
     return { provider: "", model, separator: "" };

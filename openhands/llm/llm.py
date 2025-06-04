@@ -134,8 +134,19 @@ class LLM(RetryMixin, DebugMixin):
         # Check if base_url indicates this is Telkom AI
         #if self.config.base_url and self.config.base_url == 'http://llmdev.telkom.design:8000/v1/chat/completions':
             #logger.debug(f"Detected Telkom AI provider: {self.config.base_url}")
-        if self.config.base_url and 'llmdev.telkom.design' in self.config.base_url:
+        #if self.config.base_url and 'llmdev.telkom.design' in self.config.base_url:
+        if self.config.model.startswith('telkom ai/') :
+            self.config.model = self.config.model.replace('telkom ai/', '')
+            logger.debug(f"Detected Telkom AI model: {self.config.model}")
+
+            #if self.config.base_url:
+               # logger.debug(f"Using custom Telkom AI base_url: {self.config.base_url}")
+            
+            self.config.base_url = 'http://llmdev.telkom.design:8000'
+            logger.debug(f"Using custom Telkom AI base_url: {self.config.base_url}")
+
             logger.debug(f"Detected Telkom AI provider: {self.config.base_url}")
+            logger.debug(f"PROVIDER:  {self.config.custom_llm_provider}")
     
             # Base URL should be just the host part
             if '/v1/chat/completions' in self.config.base_url:

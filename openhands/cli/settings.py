@@ -14,6 +14,7 @@ from openhands.cli.tui import (
 from openhands.cli.utils import (
     VERIFIED_ANTHROPIC_MODELS,
     VERIFIED_OPENAI_MODELS,
+    VERIFIED_TELKOM_MODELS,
     VERIFIED_PROVIDERS,
     organize_models_and_providers,
 )
@@ -182,6 +183,12 @@ async def modify_llm_settings_basic(
                 m for m in provider_models if m not in VERIFIED_ANTHROPIC_MODELS
             ]
             provider_models = VERIFIED_ANTHROPIC_MODELS + provider_models
+
+        if provider == 'telkom':
+            provider_models = [
+                m for m in provider_models if m not in VERIFIED_TELKOM_MODELS
+            ]
+            provider_models = VERIFIED_TELKOM_MODELS + provider_models
 
         model_completer = FuzzyWordCompleter(provider_models)
         model = await get_validated_input(
